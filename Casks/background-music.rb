@@ -18,7 +18,20 @@ cask "background-music" do
 
   uninstall pkgutil:   "com.bearisdriving.BGM",
             quit:      "com.bearisdriving.BGM.App",
-            launchctl: "com.bearisdriving.BGM.XPCHelper"
+            launchctl: "com.bearisdriving.BGM.XPCHelper",
+            delete:    "/usr/local/libexec/BGMXPCHelper.xpc",
+            script:    {
+                         executable: "/usr/bin/dscl . -delete /Users/_BGMXPCHelper",
+                         sudo: true
+                       },
+            script:    {
+                         executable: "/usr/bin/dscl . -delete /Groups/_BGMXPCHelper",
+                         sudo: true
+                       },
+            script:    {
+                         executable: "/bin/launchctl kickstart -kp system/com.apple.audio.coreaudiod",
+                         sudo: true
+                       }
 
   zap trash: "~/Library/Preferences/com.bearisdriving.BGM.App.plist"
 end
